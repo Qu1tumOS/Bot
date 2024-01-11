@@ -14,6 +14,16 @@ router = Router()
 
 @router.callback_query(F.data == 'delete_profile')
 async def delete_profile(callback: CallbackQuery):
+    await callback.message.edit_text(
+        text='Ты точно хочешь удалить свой профиль?\n\nтвои данные навсегда пропадут из базы данных',
+        reply_markup=create_inline_kb(2,
+                                       YES_delete_profile='Удалить',
+                                       user_info='Назад')
+    )
+    await callback.answer()
+
+@router.callback_query(F.data == 'YES_delete_profile')
+async def delete_profile(callback: CallbackQuery):
     session.query(User).filter(User.tg_id==callback.from_user.id).delete(synchronize_session="fetch")
     session.commit()
     await callback.message.edit_text(
