@@ -21,8 +21,8 @@ async def open_profile(callback: CallbackQuery):
             text='ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ',
             reply_markup=create_inline_kb(1,
                                         user_info='Профиль🎅',
-                                        user_friends='Друзья',
-                                        support='Поддержка',
+                                        # user_friends='Друзья',
+                                        # support='Поддержка',
                                         # admin_panel='Админ панель',
                                         menu_button='Назад')
         )
@@ -31,8 +31,8 @@ async def open_profile(callback: CallbackQuery):
             text='ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ',
             reply_markup=create_inline_kb(1,
                                         user_info='Профиль🎅',
-                                        user_friends='Друзья',
-                                        support='Поддержка👤',
+                                        # user_friends='Друзья',
+                                        # support='Поддержка👤',
                                         menu_button='Назад')
         )
     await callback.answer()
