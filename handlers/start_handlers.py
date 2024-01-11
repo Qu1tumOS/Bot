@@ -12,15 +12,11 @@ router = Router()
 
 @router.message(CommandStart())
 async def process_start_command(message: Message):
-    user = session.query(User).filter(User.tg_id==message.from_user.id).first()
-    if user == None:
-        await message.answer(
+    await message.answer(
             text="Войди в аккаунт или пройди небольшую регистрацию",
             reply_markup=create_inline_kb(1,
                                         log_button='Вход')
             )
-    else:
-        await message.delete()
 
 
 @router.callback_query(F.data == 'log_button')
