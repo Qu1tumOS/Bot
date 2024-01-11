@@ -13,7 +13,7 @@ groups_name = dict()
 
 
 def url_groups_update():
-    print(f'{"-"*30}\nОбновление URL групп...')
+    print(f'\nОбновление URL групп...\n')
 
     url = 'http://raspisanie.nnst.ru/public/www/cg.htm'
 
@@ -23,9 +23,8 @@ def url_groups_update():
 
     for group in groups:
         all_groups[group.text] = group.get('href')
-
-    for group in groups:
         groups_name[group.text] = group.text
+
 
 
 
