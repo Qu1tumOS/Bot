@@ -94,7 +94,8 @@ async def open_admin_panel(callback: CallbackQuery):
         text=f'@{str(name)}\n\n'\
              f'<code>Имя      {str(user_name).rjust(15, " ")}</code>\n'\
              f'<code>Группа   {str(user.group).rjust(15, " ")}</code>\n'\
-             f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>',
+             f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>\n'\
+             f'{page+1}/{len(users)}',
         parse_mode='HTML',
         reply_markup=create_inline_kb(2,
                                       all_users='back',
@@ -130,7 +131,8 @@ async def open_admin_panel(callback: CallbackQuery):
             text=f'@{str(name)}\n\n'\
                 f'<code>Имя      {str(user_name).rjust(15, " ")}</code>\n'\
                 f'<code>Группа   {str(user.group).rjust(15, " ")}</code>\n'\
-                f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>',
+                f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>\n'\
+                f'{page+1}/{len(users)}',
             parse_mode='HTML',
             reply_markup=create_inline_kb(2,
                                           forward_user='<-',
@@ -175,7 +177,8 @@ async def open_admin_panel(callback: CallbackQuery):
             text=f'@{str(name)}\n\n'\
                 f'<code>Имя      {str(user_name).rjust(15, " ")}</code>\n'\
                 f'<code>Группа   {str(user.group).rjust(15, " ")}</code>\n'\
-                f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>',
+                f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>\n'\
+                f'{page+1}/{len(users)}',
             parse_mode='HTML',
             reply_markup=create_inline_kb(2,
                                           forward_user='<-',
