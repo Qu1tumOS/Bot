@@ -53,21 +53,32 @@ listt = []
 @router.callback_query(F.data == 'all_users')
 async def open_admin_panel(callback: CallbackQuery):
     users = session.query(User).all()
+    using_groups = dict()
+    groups=list()
 
     global page
     page = 0
     for user in users:
         listt.append(user)
+        using_groups.setdefault(user.group, 0)
+        using_groups[user.group] += 1
+
+    for i in using_groups.items():
+        groups.append(f'{i[0]} - {i[1]}')
+    groups.append(f'\nКоличество пользователей - {len(users)}')
+
+    text = '\n'.join(groups)
+
+    print(text)
 
     await callback.message.edit_text(
-        text=f'Количество пользователей - {len(users)}',
+        text=text,
         reply_markup=create_inline_kb(2,
                                       admin_panel='back',
                                       view_users='смотреть профили')
     )
 
 
-    print(listt[0].name)
     await callback.answer()
 
 
