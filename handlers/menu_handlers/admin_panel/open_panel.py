@@ -63,7 +63,7 @@ async def open_admin_panel(callback: CallbackQuery):
         using_groups.setdefault(user.group, 0)
         using_groups[user.group] += 1
 
-    for i in using_groups.items():
+    for i in sorted(using_groups.items(), key=lambda item: item[1]):
         groups.append(f'{i[0]} - {i[1]}')
     groups.append(f'\nКоличество пользователей - {len(users)}')
 
