@@ -23,7 +23,7 @@ def print_day(rasp_date, list_days, subgroup):
 
     output = [f'{date[:-5].rjust(15, " ")} {week.ljust(tabs-12, " ")}']
 
-    descript = 'ПМ.02 ПМ.05 ОП.01 ОП.02 ОП.03 ОП.04 ОП.05 ОГСЭ.04 ОГСЭ.03'
+    descript = 'ПМ.02 ПМ.05 ОП.01 ОП.02 ОП.03 ОП.04 ОП.05 ОГСЭ.04 ОГСЭ.03 ОУД.14 ОУД.04 ОУД.10 ОУД.11 ОУД.03 ОУД.07 ОП.011 ЕН.03'
 
 
     for i in pars:
