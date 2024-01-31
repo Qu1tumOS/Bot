@@ -39,6 +39,6 @@ def print_day(rasp_date, list_days, subgroup):
 
     output = '\n'.join(output)
 
-    if week != 'Вс'
+    if week != 'Вс':
         return output
     return 'единственный выходной 🥳'
