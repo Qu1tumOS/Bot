@@ -93,8 +93,9 @@ def users(info=None):
     page = 0
     for user in users:
         listt.append(user)
-        using_groups.setdefault(user.group, 0)
-        using_groups[user.group] += 1
+        if user.group != None:
+            using_groups.setdefault(user.group, 0)
+            using_groups[user.group] += 1
 
     for i in sorted(using_groups.items(), key=lambda item: item[1]):
         groups.append(f'{i[0]} - {i[1]}')

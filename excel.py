@@ -46,7 +46,7 @@ def add_stat(day, file_name):
 
     sheet = workbook[lexicon_month[month]]
     for i in users().items():
-        for row in range(1, sheet.max_row + 1):
+        for row in range(2, sheet.max_row + 1):
             if sheet.cell(row=row, column=1).value == i[0]:
                 row_number = row
                 break
@@ -61,5 +61,5 @@ def add_stat(day, file_name):
 
     workbook.save(f'{file_name}.xlsx')
 
-# create_table('2024')
-# add_stat('2024-02-03', '2024')
+create_table('2024')
+add_stat('2024-02-03', '2024')
