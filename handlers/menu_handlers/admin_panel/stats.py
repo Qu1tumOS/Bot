@@ -1,8 +1,6 @@
 from aiogram import Router, F
 from aiogram.types import CallbackQuery, FSInputFile
-from excel import create_table, add_stat
-
-import datetime
+from excel import create_table
 
 from keyboards.keyboard_creator import create_inline_kb
 
@@ -12,20 +10,16 @@ from DataBase.db_connect import *
 router = Router()
 
 
-today = (datetime.datetime.today() + datetime.timedelta(days=0)).strftime('%Y-%m-%d')
-
 @router.callback_query(F.data == 'statistics')
 async def statistics(callback: CallbackQuery):
     await callback.message.edit_text(
         text='text suuuu',
         reply_markup=create_inline_kb(1,
                                       add_table='создать новую таблицу',
-                                      update_stats='добавить статистику',
                                       send_stats='отправить таблицу',
                                       admin_panel='назад'
         )
     )
-
 
 
 @router.callback_query(F.data == 'add_table')
@@ -49,11 +43,6 @@ async def verify_add_stats(callback: CallbackQuery):
                                       admin_panel='назад'
         )
     )
-
-@router.callback_query(F.data == 'update_stats')
-async def update_stats(callback: CallbackQuery):
-    add_stat(today, '2024')
-    await callback.answer('succes!')
 
 @router.callback_query(F.data == 'send_stats')
 async def send_stats(callback: CallbackQuery):
