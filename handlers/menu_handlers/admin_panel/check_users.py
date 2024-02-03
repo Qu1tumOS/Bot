@@ -1,0 +1,159 @@
+from aiogram import Router, F
+from aiogram.types import CallbackQuery, FSInputFile
+
+from parser.pars import url_groups_update
+
+from parser.pars import group_par, date, users
+from parser.lexicon_pars import print_day
+
+
+from keyboards.keyboard_creator import create_inline_kb
+
+from DataBase.db_connect import *
+
+
+router = Router()
+
+
+page = 0
+listt = []
+
+@router.callback_query(F.data == 'all_users')
+async def open_admin_panel(callback: CallbackQuery):
+    await callback.message.edit_text(
+        text=users('text'),
+        reply_markup=create_inline_kb(2,
+                                      admin_panel='back',
+                                      view_users='смотреть профили')
+    )
+
+
+    await callback.answer()
+
+
+@router.callback_query(F.data == 'view_users')
+async def open_admin_panel(callback: CallbackQuery):
+    global page, listt
+
+    users = session.query(User).all()
+
+    for user in users:
+        listt.append(user)
+
+
+    page = 0
+
+    user = listt[page]
+
+    print(user.name, user.user_name, user.group, user.subgroup)
+
+    name = str(user.name).replace('<', '').replace('>', '').replace('&', '')
+    user_name = str(user.user_name).replace('<', '').replace('>', '').replace('&', '')
+
+    await callback.message.edit_text(
+        text=f'@{str(name)}\n\n'\
+             f'<code>Имя      {str(user_name).rjust(15, " ")}</code>\n'\
+             f'<code>Группа   {str(user.group).rjust(15, " ")}</code>\n'\
+             f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>\n'\
+             f'{page+1}/{len(users)}',
+        parse_mode='HTML',
+        reply_markup=create_inline_kb(2,
+                                      all_users='back',
+                                      next_user='->')
+    )
+
+
+    await callback.answer()
+
+
+@router.callback_query(F.data == 'next_user')
+async def open_admin_panel(callback: CallbackQuery):
+    global page, listt
+
+    users = session.query(User).all()
+
+    for user in users:
+        listt.append(user)
+
+
+    if page < len(users)-1:
+        page += 1
+
+
+        user = listt[page]
+
+        print(user.name, user.user_name, user.group, user.subgroup)
+
+        name = str(user.name).replace('<', '').replace('>', '').replace('&', '')
+        user_name = str(user.user_name).replace('<', '').replace('>', '').replace('&', '')
+
+        await callback.message.edit_text(
+            text=f'@{str(name)}\n\n'\
+                f'<code>Имя      {str(user_name).rjust(15, " ")}</code>\n'\
+                f'<code>Группа   {str(user.group).rjust(15, " ")}</code>\n'\
+                f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>\n'\
+                f'{page+1}/{len(users)}',
+            parse_mode='HTML',
+            reply_markup=create_inline_kb(2,
+                                          forward_user='<-',
+                                          next_user='->',
+                                          all_users='back'
+                                          )
+        )
+    else:
+        await callback.message.edit_text(
+            text='больше пользователей нет',
+            reply_markup=create_inline_kb(2,
+                                          forward_user='<-',
+                                          all_users='back'
+                                          )
+        )
+
+    await callback.answer()
+
+
+@router.callback_query(F.data == 'forward_user')
+async def open_admin_panel(callback: CallbackQuery):
+    global page, listt
+
+    users = session.query(User).all()
+
+    for user in users:
+        listt.append(user)
+
+
+    if page > 0:
+        page -= 1
+
+
+        user = listt[page]
+
+        print(user.name, user.user_name, user.group, user.subgroup)
+
+        name = str(user.name).replace('<', '').replace('>', '').replace('&', '')
+        user_name = str(user.user_name).replace('<', '').replace('>', '').replace('&', '')
+
+        await callback.message.edit_text(
+            text=f'@{str(name)}\n\n'\
+                f'<code>Имя      {str(user_name).rjust(15, " ")}</code>\n'\
+                f'<code>Группа   {str(user.group).rjust(15, " ")}</code>\n'\
+                f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>\n'\
+                f'{page+1}/{len(users)}',
+            parse_mode='HTML',
+            reply_markup=create_inline_kb(2,
+                                          forward_user='<-',
+                                          next_user='->',
+                                          all_users='back'
+                                          )
+        )
+    else:
+        page = -1
+        await callback.message.edit_text(
+            text='больше пользователей нет',
+            reply_markup=create_inline_kb(2,
+                                          all_users='back',
+                                          next_user='->'
+                                          )
+        )
+
+    await callback.answer()
