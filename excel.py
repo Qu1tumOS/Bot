@@ -61,5 +61,5 @@ def add_stat(day, file_name):
 
     workbook.save(f'{file_name}.xlsx')
 
-create_table('2024')
-add_stat('2024-02-03', '2024')
+# create_table('2024')
+# add_stat('2024-02-03', '2024')

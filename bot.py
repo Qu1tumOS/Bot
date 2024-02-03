@@ -7,14 +7,11 @@ from handlers import not_register_handlers
 from handlers import start_handlers
 from handlers import today_handlers
 from handlers import tomorrow_handlers, other_handlers
-
 from handlers.menu_handlers import open_menu_handlers, support_handlers
-
-
 from handlers.menu_handlers.user_info import info_handlers
 from handlers.menu_handlers.user_info import edit_handlers
 from handlers.menu_handlers.user_info import delete_handlers
-from handlers.menu_handlers.admin_panel import open_panel
+from handlers.menu_handlers.admin_panel import check_users, open_panel, stats
 
 
 
@@ -42,6 +39,8 @@ async def main() -> None:
     dp.include_router(delete_handlers.router)
     dp.include_router(open_panel.router)
     dp.include_router(support_handlers.router)
+    dp.include_router(check_users.router)
+    dp.include_router(stats.router)
 
     dp.include_router(other_handlers.router)
 
