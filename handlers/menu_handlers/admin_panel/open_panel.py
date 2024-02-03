@@ -1,9 +1,9 @@
 from aiogram import Router, F
-from aiogram.types import CallbackQuery
+from aiogram.types import CallbackQuery, FSInputFile
 
 from parser.pars import url_groups_update
 
-from parser.pars import group_par, date
+from parser.pars import group_par, date, users
 from parser.lexicon_pars import print_day
 
 
@@ -23,6 +23,7 @@ async def open_admin_panel(callback: CallbackQuery):
                                               update_url_group='Обновить группы',
                                               week_pars='пары на послезавтра',
                                               all_users='пользователи',
+                                              statistics='статистика',
                                               profile='Назад')
             )
     await callback.answer()
@@ -52,27 +53,8 @@ listt = []
 
 @router.callback_query(F.data == 'all_users')
 async def open_admin_panel(callback: CallbackQuery):
-    users = session.query(User).all()
-    using_groups = dict()
-    groups=list()
-
-    global page
-    page = 0
-    for user in users:
-        listt.append(user)
-        using_groups.setdefault(user.group, 0)
-        using_groups[user.group] += 1
-
-    for i in sorted(using_groups.items(), key=lambda item: item[1]):
-        groups.append(f'{i[0]} - {i[1]}')
-    groups.append(f'\nКоличество пользователей - {len(users)}')
-
-    text = '\n'.join(groups)
-
-    print(text)
-
     await callback.message.edit_text(
-        text=text,
+        text=users('text'),
         reply_markup=create_inline_kb(2,
                                       admin_panel='back',
                                       view_users='смотреть профили')
@@ -208,3 +190,12 @@ async def open_admin_panel(callback: CallbackQuery):
         )
 
     await callback.answer()
+
+
+@router.callback_query(F.data == 'statistics')
+async def statistics(callback: CallbackQuery):
+    dock = FSInputFile('2024.xlsx')
+    await callback.message.reply_document(dock,
+                                          caption='статистика по количеству пользователей',
+                                          reply_markup=create_inline_kb(1,
+                                                                        del_document='удалить'))

@@ -1,6 +1,8 @@
 import requests
 import datetime
 from bs4 import BeautifulSoup as bs
+from DataBase.db_connect import *
+
 
 
 def date(offset_days: int):
@@ -10,6 +12,7 @@ def date(offset_days: int):
 
 all_groups = dict()
 groups_name = dict()
+groups_list = list()
 
 
 def url_groups_update():
@@ -24,8 +27,7 @@ def url_groups_update():
     for group in groups:
         all_groups[group.text] = group.get('href')
         groups_name[group.text] = group.text
-
-
+        groups_list.append(group.text)
 
 
 url_groups_update()
@@ -77,3 +79,29 @@ def group_par(group: str) -> dict:
 
     print('Запрос на сайт')
     return rasp
+
+
+page = 0
+listt = []
+
+def users(info=None):
+    users = session.query(User).all()
+    using_groups = dict()
+    groups=list()
+
+    global page
+    page = 0
+    for user in users:
+        listt.append(user)
+        using_groups.setdefault(user.group, 0)
+        using_groups[user.group] += 1
+
+    for i in sorted(using_groups.items(), key=lambda item: item[1]):
+        groups.append(f'{i[0]} - {i[1]}')
+    groups.append(f'\nКоличество пользователей - {len(users)}')
+
+    text = '\n'.join(groups)
+
+    if info == 'text':
+        return text
+    return using_groups
