@@ -21,7 +21,6 @@ async def open_admin_panel(callback: CallbackQuery):
         text='ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ',
         reply_markup=create_inline_kb(1,
                                       update_url_group='Обновить группы',
-                                      all_users='пользователи',
                                       statistics='статистика',
                                       profile='Назад')
             )

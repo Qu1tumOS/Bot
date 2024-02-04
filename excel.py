@@ -1,6 +1,9 @@
 import pandas as pd
 import openpyxl
 from parser.pars import groups_list, users
+import datetime
+
+today = (datetime.datetime.today() + datetime.timedelta(days=0)).strftime('%Y-%m-%d')
 
 def month(month):
     if month < 12:
@@ -45,21 +48,21 @@ def add_stat(day, file_name):
         month = int(day[5:7])
 
     sheet = workbook[lexicon_month[month]]
+
+
+    for col in range(1, sheet.max_column+1):
+        if sheet.cell(row=1, column=col).value == day:
+            column_number = col
+            break
+    for row in range(2, sheet.max_row + 1):
+        sheet.cell(row = row, column=column_number).value = '-'
+
     for i in users().items():
         for row in range(2, sheet.max_row + 1):
             if sheet.cell(row=row, column=1).value == i[0]:
                 row_number = row
                 break
-        if row_number is not None:
-            for col in range(1, sheet.max_column+1):
-                if sheet.cell(row=1, column=col).value == day:
-                    column_number = col
-                    break
-            if column_number is not None:
-                cell = sheet.cell(row=row_number, column=column_number)
-                cell.value = i[1]
+
+        sheet.cell(row=row_number, column=column_number).value = i[1]
 
     workbook.save(f'{file_name}.xlsx')
-
-create_table('2024')
-add_stat('2024-02-03', '2024')

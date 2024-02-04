@@ -88,6 +88,7 @@ def users(info=None):
     users = session.query(User).all()
     using_groups = dict()
     groups=list()
+    None_users = 0
 
     global page
     page = 0
@@ -96,10 +97,12 @@ def users(info=None):
         if user.group != None:
             using_groups.setdefault(user.group, 0)
             using_groups[user.group] += 1
+        else:
+            None_users += 1
 
     for i in sorted(using_groups.items(), key=lambda item: item[1]):
         groups.append(f'{i[0]} - {i[1]}')
-    groups.append(f'\nКоличество пользователей - {len(users)}')
+    groups.append(f'\nКоличество пользователей - {len(users) - None_users}')
 
     text = '\n'.join(groups)
 

@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import CallbackQuery, FSInputFile
 from excel import create_table
-
+from parser.pars import users
 from keyboards.keyboard_creator import create_inline_kb
 
 from DataBase.db_connect import *
@@ -13,13 +13,15 @@ router = Router()
 @router.callback_query(F.data == 'statistics')
 async def statistics(callback: CallbackQuery):
     await callback.message.edit_text(
-        text='text suuuu',
+        text=users('text'),
         reply_markup=create_inline_kb(1,
                                       add_table='создать новую таблицу',
+                                      view_users='смотреть профили',
                                       send_stats='отправить таблицу',
                                       admin_panel='назад'
         )
     )
+    await callback.answer()
 
 
 @router.callback_query(F.data == 'add_table')

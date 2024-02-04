@@ -6,7 +6,7 @@ from keyboards.keyboard_creator import create_inline_kb
 from parser.pars import all_groups, groups_name
 from DataBase.db_connect import *
 
-from excel import add_stat
+from excel import add_stat, today
 
 
 
@@ -80,7 +80,8 @@ async def add_group(callback: CallbackQuery):
                                           subgroup_2='2',
                                           NST='Назад')
         )
-        add_stat((datetime.datetime.today() + datetime.timedelta(days=0)).strftime('%Y-%m-%d'), '2024')
+        
+        add_stat(today, '2024')
 
     else:
         await callback.message.edit_text(

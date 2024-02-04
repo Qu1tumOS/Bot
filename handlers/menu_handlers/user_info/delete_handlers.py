@@ -8,6 +8,8 @@ from keyboards.keyboard_creator import create_inline_kb
 
 from DataBase.db_connect import *
 
+from excel import add_stat, today
+
 
 router = Router()
 
@@ -31,4 +33,7 @@ async def delete_profile(callback: CallbackQuery):
         reply_markup=create_inline_kb(1,
                                       log_button='Регистрация')
     )
+    
+    add_stat(today, '2024')
+
     await callback.answer()
