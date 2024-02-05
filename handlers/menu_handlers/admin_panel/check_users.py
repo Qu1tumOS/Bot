@@ -22,7 +22,7 @@ listt = []
 async def open_admin_panel(callback: CallbackQuery):
     global page, listt
 
-    users = session.query(User).all()
+    users = session.query(User).filter(User.name != None).all()
 
     for user in users:
         listt.append(user)
@@ -56,7 +56,7 @@ async def open_admin_panel(callback: CallbackQuery):
 async def open_admin_panel(callback: CallbackQuery):
     global page, listt
 
-    users = session.query(User).all()
+    users = session.query(User).filter(User.name != None).all()
 
     for user in users:
         listt.append(user)
@@ -113,7 +113,7 @@ async def open_admin_panel(callback: CallbackQuery):
 async def open_admin_panel(callback: CallbackQuery):
     global page, listt
 
-    users = session.query(User).all()
+    users = session.query(User).filter(User.name != None).all()
 
     for user in users:
         listt.append(user)
