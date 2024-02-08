@@ -12,6 +12,7 @@ days = {
 
 
 def print_day(rasp_date, list_days, subgroup):
+    subgroup = int(subgroup)
     subgroup -= 1
 
     day = datetime.datetime.strptime(rasp_date, "%d.%m.%Y")
