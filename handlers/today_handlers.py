@@ -69,13 +69,20 @@ async def update_today(callback: CallbackQuery):
 async def not_today(callback: CallbackQuery):
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
 
-    today_next = date(1)
-    request_site = group_par(user.group)
-    await callback.message.edit_text(
-        text=f'`{print_day(today_next, request_site, user.subgroup)}`',
-        parse_mode='MarkdownV2',
-        reply_markup=create_inline_kb(2,
-                                      menu_button='Назад',
-                                      update_tomorrow='Обновить')
-    )
-    await callback.answer()
+    today = date(1)
+    week_pars = group_par(user.group)
+
+    if today in week_pars:
+        check = print_day(today, week_pars, user.subgroup)
+        await callback.message.edit_text(
+            text=f'`{check}`',
+            parse_mode='MarkdownV2',
+            reply_markup=create_inline_kb(2,
+                                    menu_button='Назад',
+                                    update_tomorrow='Обновить')
+        )
+    else:
+        await callback.message.edit_text(
+            text='завтра пар не будет',
+            reply_markup=create_inline_kb(2,
+                                          menu_button='Назад'))
