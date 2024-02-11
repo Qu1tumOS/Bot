@@ -23,6 +23,7 @@ async def open_profile(callback: CallbackQuery):
                                         user_info='Профиль🎅',
                                         # user_friends='Друзья',
                                         support='Поддержка',
+                                        pay_money='поддержать проект',
                                         admin_panel='Админ панель',
                                         menu_button='Назад')
         )
@@ -33,6 +34,7 @@ async def open_profile(callback: CallbackQuery):
                                         user_info='Профиль🎅',
                                         # user_friends='Друзья',
                                         support='Поддержка👤',
+                                        pay_money='поддержать проект',
                                         menu_button='Назад')
         )
     await callback.answer()

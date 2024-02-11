@@ -7,7 +7,7 @@ from handlers import not_register_handlers
 from handlers import start_handlers
 from handlers import today_handlers
 from handlers import tomorrow_handlers, other_handlers
-from handlers.menu_handlers import open_menu_handlers, support_handlers
+from handlers.menu_handlers import open_menu_handlers, support_handlers, money_for_me
 from handlers.menu_handlers.user_info import info_handlers
 from handlers.menu_handlers.user_info import edit_handlers
 from handlers.menu_handlers.user_info import delete_handlers
@@ -41,6 +41,7 @@ async def main() -> None:
     dp.include_router(support_handlers.router)
     dp.include_router(check_users.router)
     dp.include_router(stats.router)
+    dp.include_router(money_for_me.router)
 
     dp.include_router(other_handlers.router)
 

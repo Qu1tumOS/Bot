@@ -1,12 +1,15 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from environs import Env
 
+env = Env()
+env.read_env()
 
 
 
 def create_inline_kb(width: int,
                      *args: str,
-                     last_button: str | None = None,
+                     url_button: str | None = None,
                      **kwargs: str) -> InlineKeyboardMarkup:
     # Инициализируем билдер
     kb_builder = InlineKeyboardBuilder()
@@ -14,6 +17,12 @@ def create_inline_kb(width: int,
     buttons: list[InlineKeyboardButton] = []
 
     # Заполняем список кнопками из аргументов args и kwargs
+    if url_button:
+        kb_builder.row(InlineKeyboardButton(
+            text=url_button,
+            url=env('PAY_URL')
+        ))
+
     if args:
         for button in args:
             buttons.append(InlineKeyboardButton(
@@ -27,12 +36,6 @@ def create_inline_kb(width: int,
 
     # Распаковываем список с кнопками в билдер методом row c параметром width
     kb_builder.row(*buttons, width=width)
-
-    if last_button:
-        kb_builder.row(InlineKeyboardButton(
-            text=last_button,
-            callback_data='last_button'
-        ))
 
     # Возвращаем объект инлайн-клавиатуры
     return kb_builder.as_markup()
