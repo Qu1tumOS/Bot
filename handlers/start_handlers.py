@@ -7,7 +7,9 @@ from parser.pars import all_groups, groups_name
 from DataBase.db_connect import *
 
 from excel import add_stat, today
+import logging
 
+logger = logging.getLogger(__name__)
 
 
 router = Router()
@@ -81,8 +83,9 @@ async def add_group(callback: CallbackQuery):
                                           subgroup_2='2',
                                           NST='Назад')
         )
-
+        logger.info('НОВЫЙ ПОЛЬЗОВАТЕЛЬ\n')
         add_stat(today, '2024')
+        logger.info('ОБНОВЛЕНА СТАТИСТИКА\n')
 
     else:
         await callback.message.edit_text(

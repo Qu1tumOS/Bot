@@ -77,7 +77,7 @@ def group_par(group: str) -> dict:
                         two_subgroup_para.append([para, cab])
                         rasp[date].append(two_subgroup_para)
 
-    print('Запрос на сайт')
+    
     return rasp
 
 

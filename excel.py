@@ -3,6 +3,10 @@ import openpyxl
 from parser.pars import groups_list, users
 import datetime
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 today = (datetime.datetime.today() + datetime.timedelta(days=0)).strftime('%Y-%m-%d')
 
 def month(month):
@@ -41,36 +45,38 @@ def create_table(name):
             page.to_excel(writer, sheet_name=lexicon_month[i])
 
 def add_stat(day, file_name):
-    print('---start add stats--- :1')
+    logger.info('-----start add stats----- \n')
+
     workbook = openpyxl.load_workbook(f'{file_name}.xlsx')
-    print('open file :2')
+    logger.info('open file :1')
+
     if day[5] == '0':
         month = int(day[6])
     else:
         month = int(day[5:7])
-    print('add month name :3')
+    logger.info('add month name :2')
 
     sheet = workbook[lexicon_month[month]]
-    print('open month page :4')
+    logger.info('open month page :3')
 
 
     for col in range(1, sheet.max_column+1):
         if sheet.cell(row=1, column=col).value == day:
             column_number = col
-            print('YES FIND DAY COLUMN :5')
+            logger.info('YES FIND DAY COLUMN :4')
             break
     for row in range(2, sheet.max_row + 1):
         sheet.cell(row = row, column=column_number).value = '-'
-    print('all rows fill - :6')
+    logger.info('all rows fill - :5')
 
     for i in users().items():
         for row in range(2, sheet.max_row + 1):
             if sheet.cell(row=row, column=1).value == i[0]:
                 row_number = row
-                print(f'YES FIND COLUMN GROUP {i[0]} :7')
+                logger.info(f'YES FIND COLUMN GROUP {i[0]} :6')
                 break
         sheet.cell(row=row_number, column=column_number).value = i[1]
-        print('ADD stat :8')
+        logger.info('ADD stat :7')
 
     workbook.save(f'{file_name}.xlsx')
-    print('save new stats :9')
+    logger.info('save new stats :8\n')
