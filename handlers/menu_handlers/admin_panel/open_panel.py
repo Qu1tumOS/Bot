@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.types import CallbackQuery, FSInputFile
+from aiogram.types import CallbackQuery
 
 from parser.pars import url_groups_update
 
@@ -11,12 +11,21 @@ from keyboards.keyboard_creator import create_inline_kb
 
 from DataBase.db_connect import *
 
+import logging
+
 
 router = Router()
 
 
 @router.callback_query(F.data == 'admin_panel')
 async def open_admin_panel(callback: CallbackQuery):
+
+    logging.debug('Это лог уровня DEBUG')
+    logging.info('Это лог уровня INFO')
+    logging.warning('Это лог уровня WARNING')
+    logging.error('Это лог уровня ERROR')
+    logging.critical('Это лог уровня CRITICAL')
+    
     await callback.message.edit_text(
         text='ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ',
         reply_markup=create_inline_kb(1,

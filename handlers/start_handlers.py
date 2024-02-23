@@ -32,25 +32,25 @@ async def log(callback: CallbackQuery):
                          user_name=callback.from_user.first_name))
         session.commit()
         await callback.message.edit_text(
-        text=f'''Выбери техникум:''',
-        reply_markup=create_inline_kb(1,
-                                      NST='НСТ')
+            text=f'''Выбери техникум:''',
+            reply_markup=create_inline_kb(1,
+                                          NST='НСТ')
     )
 
     elif user_info.group == None:
         await callback.message.edit_text(
-        text='Выбери свою группу и подгруппу',
-        reply_markup=create_inline_kb(6,
-                                      **groups_name)
+            text='Выбери свою группу и подгруппу',
+            reply_markup=create_inline_kb(6,
+                                          **groups_name)
     )
 
     else:
         await callback.message.edit_text(
-        text='ㅤㅤㅤㅤГлавное меню\nпосмотреть расписание на:',
-        reply_markup=create_inline_kb(2,
-                                      today_button='Сегодня',
-                                      tomorrow_button='Завтра',
-                                      profile='Меню')
+            text='ㅤㅤㅤㅤГлавное меню\nпосмотреть расписание на:',
+            reply_markup=create_inline_kb(2,
+                                          today_button='Сегодня',
+                                          tomorrow_button='Завтра',
+                                          profile='Меню')
     )
     await callback.answer()
 
@@ -60,10 +60,11 @@ async def add_collage_nst(callback: CallbackQuery):
     user_info = session.query(User).filter(User.tg_id==callback.from_user.id).first()
     user_info.collage = 'НСТ'
     session.commit()
-    await callback.message.edit_text(text='Выбери свою группу',
-                                     reply_markup=create_inline_kb(6,
-                                                                   **groups_name)
-                                     )
+    await callback.message.edit_text(
+        text='Выбери свою группу',
+        reply_markup=create_inline_kb(6,
+                                      **groups_name)
+    )
     await callback.answer()
 
 
@@ -80,7 +81,7 @@ async def add_group(callback: CallbackQuery):
                                           subgroup_2='2',
                                           NST='Назад')
         )
-        
+
         add_stat(today, '2024')
 
     else:
