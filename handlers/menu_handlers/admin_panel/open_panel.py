@@ -10,8 +10,6 @@ from parser.lexicon_pars import print_day
 from keyboards.keyboard_creator import create_inline_kb
 
 from DataBase.db_connect import *
-from bot import logger
-
 
 router = Router()
 

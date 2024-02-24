@@ -20,10 +20,8 @@ router = Router()
 logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s] #%(levelname)-8s %(name)s '
-           '%(funcName)s:%(lineno)d - %(message)s'
-)
+           '%(funcName)s:%(lineno)d - %(message)s')
 
-logger = logging.getLogger(__name__)
 
 async def main() -> None:
     print("\n\n ---start--- \n")
@@ -54,7 +52,6 @@ async def main() -> None:
 
     await bot.delete_webhook(drop_pending_updates=False)
     await dp.start_polling(bot, skip_updates=False)
-
 
 if __name__ == '__main__':
     asyncio.run(main())

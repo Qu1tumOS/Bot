@@ -10,6 +10,17 @@ from DataBase.db_connect import *
 
 from excel import add_stat, today
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+file_handler = logging.FileHandler('logs.txt', encoding='utf-8')
+file_handler.setFormatter(logging.Formatter(
+    fmt='[%(asctime)s] #%(levelname)-8s %(name)s '
+           '%(funcName)s:%(lineno)d - %(message)s'))
+logger.addHandler(file_handler)
+
 
 router = Router()
 
@@ -26,6 +37,7 @@ async def delete_profile(callback: CallbackQuery):
 
 @router.callback_query(F.data == 'YES_delete_profile')
 async def delete_profile(callback: CallbackQuery):
+    user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
     session.query(User).filter(User.tg_id==callback.from_user.id).delete(synchronize_session="fetch")
     session.commit()
     await callback.message.edit_text(
@@ -33,7 +45,9 @@ async def delete_profile(callback: CallbackQuery):
         reply_markup=create_inline_kb(1,
                                       log_button='Регистрация')
     )
-    
+
+    logger.info(f'ПОЛЬЗОВАТЕЛЬ {user.user_name} @{user.name} ПОКИНУЛ БОТА\n')
     add_stat(today, '2024')
+    logger.info('СТАТИСТИКА ОБНОВЛЕНА ПОСЛЕ УДАЛЕНИЯ\n')
 
     await callback.answer()

@@ -9,7 +9,14 @@ from DataBase.db_connect import *
 from excel import add_stat, today
 import logging
 
+
 logger = logging.getLogger(__name__)
+
+file_handler = logging.FileHandler('logs.txt', encoding='utf-8')
+file_handler.setFormatter(logging.Formatter(
+    fmt='[%(asctime)s] #%(levelname)-8s %(name)s '
+           '%(funcName)s:%(lineno)d - %(message)s'))
+logger.addHandler(file_handler)
 
 
 router = Router()
@@ -83,19 +90,14 @@ async def add_group(callback: CallbackQuery):
                                           subgroup_2='2',
                                           NST='Назад')
         )
-        logger.info('НОВЫЙ ПОЛЬЗОВАТЕЛЬ\n')
-        add_stat(today, '2024')
-        logger.info('ОБНОВЛЕНА СТАТИСТИКА\n')
-
     else:
         await callback.message.edit_text(
-            text=f'@{user.name}\n'\
-                f'\n'\
-                f'`Имя      {str(user.user_name).rjust(15, " ")}`\n'\
-                f'`Техникум {str(user.collage).rjust(15, " ")}`\n'\
-                f'`Группа   {str(user.group).rjust(15, " ")}`\n'\
-                f'`Подгруппа{str(user.subgroup).rjust(15, " ")}`',
-            parse_mode='MarkdownV2',
+            text=f'@{str(user.name)}\n\n'\
+             f'<code>Имя      {str(user.user_name).rjust(15, " ")}</code>\n'\
+             f'<code>Техникум {str(user.collage).rjust(15, " ")}</code>\n'\
+             f'<code>Группа   {str(user.group).rjust(15, " ")}</code>\n'\
+             f'<code>Подгруппа{str(user.subgroup).rjust(15, " ")}</code>',
+        parse_mode='HTML',
             reply_markup=create_inline_kb(2,
                                         edit_profile='Изменить',
                                         delete_profile='Удалить',
@@ -107,6 +109,12 @@ async def add_group(callback: CallbackQuery):
 @router.callback_query(F.data.in_(['subgroup_1', 'subgroup_2']))
 async def add_subgroup(callback: CallbackQuery):
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
+
+    if user.subgroup == None:
+        logger.info(f'НОВЫЙ ПОЛЬЗОВАТЕЛЬ {user.user_name} @{user.name}\n')
+        add_stat(today, '2024')
+        logger.info('СТАТИСТИКА ОБНОВЛЕНА ПОСЛЕ РЕГИСТРАЦИИ\n')
+
     user.subgroup = callback.data[-1]
     session.commit()
     await callback.message.edit_text(

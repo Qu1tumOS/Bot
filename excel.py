@@ -5,7 +5,16 @@ import datetime
 
 import logging
 
+
 logger = logging.getLogger(__name__)
+
+file_handler = logging.FileHandler('logs.txt', encoding='utf-8')
+file_handler.setFormatter(logging.Formatter(
+    fmt='[%(asctime)s] #%(levelname)-8s %(name)s '
+           '%(funcName)s:%(lineno)d - %(message)s'))
+logger.addHandler(file_handler)
+
+
 
 today = (datetime.datetime.today() + datetime.timedelta(days=0)).strftime('%Y-%m-%d')
 
@@ -45,38 +54,41 @@ def create_table(name):
             page.to_excel(writer, sheet_name=lexicon_month[i])
 
 def add_stat(day, file_name):
-    logger.info('-----start add stats----- \n')
+    try:
+        logger.info('-----start add stats----- \n')
 
-    workbook = openpyxl.load_workbook(f'{file_name}.xlsx')
-    logger.info('open file :1')
+        workbook = openpyxl.load_workbook(f'{file_name}.xlsx')
+        logger.info('open file :1')
 
-    if day[5] == '0':
-        month = int(day[6])
-    else:
-        month = int(day[5:7])
-    logger.info('add month name :2')
+        if day[5] == '0':
+            month = int(day[6])
+        else:
+            month = int(day[5:7])
+        logger.info('add month name :2')
 
-    sheet = workbook[lexicon_month[month]]
-    logger.info('open month page :3')
+        sheet = workbook[lexicon_month[month]]
+        logger.info('open month page :3')
 
 
-    for col in range(1, sheet.max_column+1):
-        if sheet.cell(row=1, column=col).value == day:
-            column_number = col
-            logger.info('YES FIND DAY COLUMN :4')
-            break
-    for row in range(2, sheet.max_row + 1):
-        sheet.cell(row = row, column=column_number).value = '-'
-    logger.info('all rows fill - :5')
-
-    for i in users().items():
-        for row in range(2, sheet.max_row + 1):
-            if sheet.cell(row=row, column=1).value == i[0]:
-                row_number = row
-                logger.info(f'YES FIND COLUMN GROUP {i[0]} :6')
+        for col in range(1, sheet.max_column+1):
+            if sheet.cell(row=1, column=col).value == day:
+                column_number = col
+                logger.info('YES FIND DAY COLUMN :4')
                 break
-        sheet.cell(row=row_number, column=column_number).value = i[1]
-        logger.info('ADD stat :7')
+        for row in range(2, sheet.max_row + 1):
+            sheet.cell(row = row, column=column_number).value = '-'
+        logger.info('all rows fill - :5')
 
-    workbook.save(f'{file_name}.xlsx')
-    logger.info('save new stats :8\n')
+        for i in users().items():
+            for row in range(2, sheet.max_row + 1):
+                if sheet.cell(row=row, column=1).value == i[0]:
+                    row_number = row
+                    logger.info(f'YES FIND COLUMN GROUP {i[0]} :6')
+                    break
+            sheet.cell(row=row_number, column=column_number).value = i[1]
+            logger.info('ADD stat :7')
+
+        workbook.save(f'{file_name}.xlsx')
+        logger.info('save new stats :8\n')
+    except Exception:
+        logger.error('Статистика не обновлена')
