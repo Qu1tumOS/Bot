@@ -8,7 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-file_handler = logging.FileHandler('logs.txt', encoding='utf-8', mode='w')
+file_handler = logging.FileHandler('logs.txt', encoding='utf8')
 file_handler.setFormatter(logging.Formatter(
     fmt='[%(asctime)s] #%(levelname)-8s %(name)s '
            '%(funcName)s:%(lineno)d - %(message)s'))

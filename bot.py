@@ -18,12 +18,20 @@ from handlers.menu_handlers.admin_panel import check_users, open_panel, stats
 router = Router()
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.WARNING,
     format='[%(asctime)s] #%(levelname)-8s %(name)s '
            '%(funcName)s:%(lineno)d - %(message)s')
 
+logger = logging.getLogger(__name__)
+
+file_handler = logging.FileHandler('logs.txt', encoding='utf8')
+file_handler.setFormatter(logging.Formatter(
+    fmt='[%(asctime)s] #%(levelname)-8s %(name)s '
+           '%(funcName)s:%(lineno)d - %(message)s'))
+logger.addHandler(file_handler)
 
 async def main() -> None:
+    logger.info("start\n")
     print("\n\n ---start--- \n")
 
     config: Config = load_config()
