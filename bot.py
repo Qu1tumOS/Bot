@@ -18,7 +18,7 @@ from handlers.menu_handlers.admin_panel import check_users, open_panel, stats
 router = Router()
 
 logging.basicConfig(
-    level=logging.WARNING,
+    level=logging.INFO,
     format='[%(asctime)s] #%(levelname)-8s %(name)s '
            '%(funcName)s:%(lineno)d - %(message)s')
 
