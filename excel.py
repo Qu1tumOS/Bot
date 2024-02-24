@@ -8,7 +8,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-file_handler = logging.FileHandler('logs.txt', encoding='utf-8')
+file_handler = logging.FileHandler('logs.txt', encoding='utf-8', mode='w')
 file_handler.setFormatter(logging.Formatter(
     fmt='[%(asctime)s] #%(levelname)-8s %(name)s '
            '%(funcName)s:%(lineno)d - %(message)s'))
@@ -83,12 +83,12 @@ def add_stat(day, file_name):
             for row in range(2, sheet.max_row + 1):
                 if sheet.cell(row=row, column=1).value == i[0]:
                     row_number = row
-                    logger.info(f'YES FIND COLUMN GROUP {i[0]} :6')
+                    logger.debug(f'YES FIND COLUMN GROUP {i[0]} :5.1')
                     break
             sheet.cell(row=row_number, column=column_number).value = i[1]
-            logger.info('ADD stat :7')
+            logger.debug('ADD stat :5.2')
 
         workbook.save(f'{file_name}.xlsx')
-        logger.info('save new stats :8\n')
+        logger.info('save new stats :6\n')
     except Exception:
         logger.error('Статистика не обновлена')
