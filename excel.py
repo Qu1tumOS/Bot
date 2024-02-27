@@ -79,7 +79,8 @@ def add_stat(day, file_name):
             sheet.cell(row = row, column=column_number).value = '-'
         logger.info('all rows fill - :5')
 
-        for i in users().items():
+        users_in_groups = users()
+        for i in users_in_groups.items():
             for row in range(2, sheet.max_row + 1):
                 if sheet.cell(row=row, column=1).value == i[0]:
                     row_number = row

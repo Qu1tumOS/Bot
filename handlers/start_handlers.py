@@ -83,6 +83,10 @@ async def add_group(callback: CallbackQuery):
     user.group = callback.data
     session.commit()
     if user.subgroup == None:
+        logger.info(f'НОВЫЙ ПОЛЬЗОВАТЕЛЬ {user.user_name} @{user.name}\n')
+        add_stat(today, '2024')
+        logger.info('СТАТИСТИКА ОБНОВЛЕНА ПОСЛЕ РЕГИСТРАЦИИ\n')
+
         await callback.message.edit_text(
             text='Окей, осталось выбрать подгруппу',
             reply_markup=create_inline_kb(2,
@@ -111,9 +115,7 @@ async def add_subgroup(callback: CallbackQuery):
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
 
     if user.subgroup == None:
-        logger.info(f'НОВЫЙ ПОЛЬЗОВАТЕЛЬ {user.user_name} @{user.name}\n')
         add_stat(today, '2024')
-        logger.info('СТАТИСТИКА ОБНОВЛЕНА ПОСЛЕ РЕГИСТРАЦИИ\n')
 
     user.subgroup = callback.data[-1]
     session.commit()
