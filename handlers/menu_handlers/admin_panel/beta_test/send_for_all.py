@@ -82,6 +82,7 @@ async def yes_invoice_message(callback: CallbackQuery):
                 chat_id=user.tg_id,
                 text=message_text,
                 reply_markup=create_inline_kb(1,
+                                              url_button='поддержать проект',
                                               del_invoice='удалить сообщение'))
         await callback.answer()
 
@@ -100,8 +101,9 @@ async def test_invoice_message(callback: CallbackQuery):
             chat_id=chat,
             text=message_text,
             reply_markup=create_inline_kb(1,
-                                          yes_invoice_message='Отправить всем',
-                                          del_test_invoice='удалить сообщение'))
+                                          url_button='поддержать проект',
+                                          del_test_invoice='удалить сообщение',
+                                          yes_invoice_message='Отправить всем'))
         await callback.answer()
 
         logger.info(f'отправлено тестовое сообщение<{message_text}>')
