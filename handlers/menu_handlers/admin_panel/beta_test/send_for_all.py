@@ -59,6 +59,7 @@ async def dont_send_invoice(callback: CallbackQuery, state: FSMContext):
 
 @router.message(StateFilter(FSMSendMessage.send_invoice_state))
 async def send_text_message(message: Message, state: FSMContext):
+    FSMSendMessage.text = message.text
     await message.delete()
     await state.clear()
     await message.send_copy(chat_id=FSMSendMessage.admin_id,
