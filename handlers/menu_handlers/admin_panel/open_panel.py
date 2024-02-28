@@ -15,11 +15,12 @@ router = Router()
 
 
 @router.callback_query(F.data == 'admin_panel')
-async def open_admin_panel(callback: CallbackQuery):
+async def admin_panel(callback: CallbackQuery):
     await callback.message.edit_text(
         text='ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ',
         reply_markup=create_inline_kb(1,
                                       update_url_group='Обновить группы',
+                                      beta_test_panel='бета функции',
                                       statistics='статистика',
                                       profile='Назад')
             )
@@ -27,6 +28,6 @@ async def open_admin_panel(callback: CallbackQuery):
 
 
 @router.callback_query(F.data == 'update_url_group')
-async def open_admin_panel(callback: CallbackQuery):
+async def update_url_group(callback: CallbackQuery):
     url_groups_update()
     await callback.answer('Succes!')

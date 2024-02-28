@@ -13,6 +13,7 @@ from handlers.menu_handlers.user_info import info_handlers
 from handlers.menu_handlers.user_info import edit_handlers
 from handlers.menu_handlers.user_info import delete_handlers
 from handlers.menu_handlers.admin_panel import check_users, open_panel, stats
+from handlers.menu_handlers.admin_panel.beta_test import open_test_panel, send_for_all
 
 
 router = Router()
@@ -54,6 +55,8 @@ async def main() -> None:
     dp.include_router(check_users.router)
     dp.include_router(stats.router)
     dp.include_router(money_for_me.router)
+    dp.include_router(open_test_panel.router)
+    dp.include_router(send_for_all.router)
 
     dp.include_router(other_handlers.router)
 
