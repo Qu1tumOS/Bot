@@ -47,9 +47,9 @@ async def send_invoice(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == 'dont_send_invoice')
 async def dont_send_invoice(callback: CallbackQuery, state: FSMContext):
     await callback.message.edit_text(
-        text='BETA FUNCTION',
+        text='Бета функции',
         reply_markup=create_inline_kb(1,
-                                      beta_new_menu='бета главное меню',
+                                      beta_new_menu='главное меню',
                                       send_invoice='отправка сообщения всем пользователям',
                                       admin_panel='назад'
                                       )
@@ -59,14 +59,13 @@ async def dont_send_invoice(callback: CallbackQuery, state: FSMContext):
 
 @router.message(StateFilter(FSMSendMessage.send_invoice_state))
 async def send_text_message(message: Message, state: FSMContext):
-    FSMSendMessage.text = message.text
     await message.delete()
     await state.clear()
-    await message.answer(text=f'отправить сообщение:\n\n{FSMSendMessage.text}',
-                         reply_markup=create_inline_kb(1,
-                                                       yes_invoice_message='Отправить',
-                                                       test_invoice_message='тестовая отправка',
-                                                       no_invoice_message='Отмена'))
+    await message.send_copy(chat_id=FSMSendMessage.admin_id,
+                            reply_markup=create_inline_kb(1,
+                                                          yes_invoice_message='Отправить',
+                                                          test_invoice_message='тестовая отправка',
+                                                          no_invoice_message='Отмена'))
 
 
 @router.callback_query(F.data == 'yes_invoice_message')
@@ -78,9 +77,8 @@ async def yes_invoice_message(callback: CallbackQuery):
         message_text = FSMSendMessage.text
 
         for user in users:
-            await callback.bot.send_message(
+            await callback.message.send_copy(
                 chat_id=user.tg_id,
-                text=message_text,
                 reply_markup=create_inline_kb(1,
                                               url_button='поддержать проект',
                                               del_invoice='удалить сообщение'))
@@ -97,13 +95,13 @@ async def test_invoice_message(callback: CallbackQuery):
         message_text = FSMSendMessage.text
         chat = FSMSendMessage.admin_id
 
-        await callback.bot.send_message(
+        await callback.message.send_copy(
             chat_id=chat,
-            text=message_text,
             reply_markup=create_inline_kb(1,
                                           url_button='поддержать проект',
                                           del_test_invoice='удалить сообщение',
                                           yes_invoice_message='Отправить всем'))
+
         await callback.answer()
 
         logger.info(f'отправлено тестовое сообщение<{message_text}>')
