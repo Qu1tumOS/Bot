@@ -10,6 +10,7 @@ from parser.pars import group_par, date, users
 from parser.lexicon_pars import print_day
 from keyboards.keyboard_creator import create_inline_kb
 from DataBase.db_connect import *
+from aiogram import exceptions
 
 from environs import Env
 
@@ -71,23 +72,23 @@ async def send_text_message(message: Message, state: FSMContext):
 
 @router.callback_query(F.data == 'yes_invoice_message')
 async def yes_invoice_message(callback: CallbackQuery):
-    try:
-        await callback.message.delete()
-        FSMSendMessage.count_use.clear()
-        users = session.query(User).all()
-        message_text = FSMSendMessage.text
+    await callback.message.delete()
+    FSMSendMessage.count_use.clear()
+    users = session.query(User).all()
+    message_text = FSMSendMessage.text
 
-        for user in users:
+    for user in users:
+        try:
             await callback.message.send_copy(
                 chat_id=user.tg_id,
                 reply_markup=create_inline_kb(1,
-                                              url_button='поддержать проект',
-                                              del_invoice='удалить сообщение'))
-        await callback.answer()
+                                            url_button='поддержать проект',
+                                            del_invoice='удалить сообщение'))
+        except Exception as x:
+            logger.warning(f'СООБЩЕНИЕ НЕ ОТПРАВЛЕНО {x}')
+    await callback.answer()
 
-        logger.info(f'отправлено сообщение <{message_text}>')
-    except Exception as x:
-        logger.warning(f'СООБЩЕНИЕ НЕ ОТПРАВЛЕНО\n{x}')
+    logger.info(f'рассылка окончена - {message_text}')
 
 @router.callback_query(F.data == 'test_invoice_message')
 async def test_invoice_message(callback: CallbackQuery):
