@@ -53,43 +53,40 @@ def create_table(name):
 
             page.to_excel(writer, sheet_name=lexicon_month[i])
 
-def add_stat(day, file_name):
-    try:
-        logger.info('-----start add stats----- \n')
+def add_stat(day=today, file_name='2024'):
+    logger.info('\n\n-----start add stats----- \n')
 
-        workbook = openpyxl.load_workbook(f'{file_name}.xlsx')
-        logger.info('open file :1')
+    workbook = openpyxl.load_workbook(f'{file_name}.xlsx')
+    logger.info('open file :1')
 
-        if day[5] == '0':
-            month = int(day[6])
-        else:
-            month = int(day[5:7])
-        logger.info('add month name :2')
+    if day[5] == '0':
+        month = int(day[6])
+    else:
+        month = int(day[5:7])
+    logger.info('add month name :2')
 
-        sheet = workbook[lexicon_month[month]]
-        logger.info('open month page :3')
+    sheet = workbook[lexicon_month[month]]
+    logger.info('open month page :3')
 
 
-        for col in range(1, sheet.max_column+1):
-            if sheet.cell(row=1, column=col).value == day:
-                column_number = col
-                logger.info('YES FIND DAY COLUMN :4')
-                break
+    for col in range(1, sheet.max_column+1):
+        if sheet.cell(row=1, column=col).value == day:
+            column_number = col
+            logger.info('YES FIND DAY COLUMN :4')
+            break
+    for row in range(2, sheet.max_row + 1):
+        sheet.cell(row = row, column=column_number).value = '-'
+    logger.info('all rows fill - :5')
+
+    users_in_groups = users()
+    for i in users_in_groups.items():
         for row in range(2, sheet.max_row + 1):
-            sheet.cell(row = row, column=column_number).value = '-'
-        logger.info('all rows fill - :5')
+            if sheet.cell(row=row, column=1).value == i[0]:
+                row_number = row
+                logger.debug(f'YES FIND COLUMN GROUP {i[0]} :5.1')
+                break
+        sheet.cell(row=row_number, column=column_number).value = i[1]
+        logger.debug('ADD stat :5.2')
 
-        users_in_groups = users()
-        for i in users_in_groups.items():
-            for row in range(2, sheet.max_row + 1):
-                if sheet.cell(row=row, column=1).value == i[0]:
-                    row_number = row
-                    logger.debug(f'YES FIND COLUMN GROUP {i[0]} :5.1')
-                    break
-            sheet.cell(row=row_number, column=column_number).value = i[1]
-            logger.debug('ADD stat :5.2')
-
-        workbook.save(f'{file_name}.xlsx')
-        logger.info('save new stats :6\n')
-    except Exception:
-        logger.error('Статистика не обновлена')
+    workbook.save(f'{file_name}.xlsx')
+    logger.info('save new stats :6\n\n')

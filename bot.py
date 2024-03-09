@@ -1,6 +1,7 @@
 import asyncio
 import logging
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aiogram import Bot, Dispatcher, Router
 from config.cfg import Config, load_config
 
@@ -14,6 +15,7 @@ from handlers.menu_handlers.user_info import edit_handlers
 from handlers.menu_handlers.user_info import delete_handlers
 from handlers.menu_handlers.admin_panel import check_users, open_panel, stats
 from handlers.menu_handlers.admin_panel.beta_test import open_test_panel, send_for_all
+from excel import add_stat
 
 
 router = Router()
@@ -60,6 +62,9 @@ async def main() -> None:
 
     dp.include_router(other_handlers.router)
 
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(add_stat, 'cron', hour=00, minute=00)
+    scheduler.start()
 
     await bot.delete_webhook(drop_pending_updates=False)
     await dp.start_polling(bot, skip_updates=False)

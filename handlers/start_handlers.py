@@ -6,7 +6,6 @@ from keyboards.keyboard_creator import create_inline_kb
 from parser.pars import all_groups, groups_name
 from DataBase.db_connect import *
 
-from excel import add_stat, today
 import logging
 
 
@@ -84,8 +83,6 @@ async def add_group(callback: CallbackQuery):
     session.commit()
     if user.subgroup == None:
         logger.info(f'НОВЫЙ ПОЛЬЗОВАТЕЛЬ {user.user_name} @{user.name}\n')
-        add_stat(today, '2024')
-        logger.info('СТАТИСТИКА ОБНОВЛЕНА ПОСЛЕ РЕГИСТРАЦИИ\n')
 
         await callback.message.edit_text(
             text='Окей, осталось выбрать подгруппу',
@@ -113,10 +110,6 @@ async def add_group(callback: CallbackQuery):
 @router.callback_query(F.data.in_(['subgroup_1', 'subgroup_2']))
 async def add_subgroup(callback: CallbackQuery):
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
-
-    if user.subgroup == None:
-        add_stat(today, '2024')
-
     user.subgroup = callback.data[-1]
     session.commit()
     await callback.message.edit_text(

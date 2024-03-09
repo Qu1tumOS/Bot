@@ -8,8 +8,6 @@ from keyboards.keyboard_creator import create_inline_kb
 
 from DataBase.db_connect import *
 
-from excel import add_stat, today
-
 import logging
 
 
@@ -47,7 +45,5 @@ async def delete_profile(callback: CallbackQuery):
     )
 
     logger.info(f'ПОЛЬЗОВАТЕЛЬ {user.user_name} @{user.name} ПОКИНУЛ БОТА\n')
-    add_stat(today, '2024')
-    logger.info('СТАТИСТИКА ОБНОВЛЕНА ПОСЛЕ УДАЛЕНИЯ\n')
 
     await callback.answer()
