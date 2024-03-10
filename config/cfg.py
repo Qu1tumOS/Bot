@@ -2,10 +2,14 @@ from dataclasses import dataclass
 from environs import Env
 
 
+class Settings:
+    descript = 'ПМ. ОП. ОГСЭ. ЕН. ОУД.'
+    add_stats_time = '02:35'
+
+
 @dataclass
 class TgBot:
     token: str            # Токен для доступа к телеграм-боту
-
 
 @dataclass
 class Config:

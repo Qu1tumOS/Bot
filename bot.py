@@ -3,7 +3,7 @@ import logging
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from aiogram import Bot, Dispatcher, Router
-from config.cfg import Config, load_config
+from config.cfg import Config, load_config, Settings
 
 from handlers import not_register_handlers
 from handlers import start_handlers
@@ -63,7 +63,7 @@ async def main() -> None:
     dp.include_router(other_handlers.router)
 
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(add_stat, 'cron', hour=00, minute=00)
+    scheduler.add_job(add_stat, 'cron', hour=Settings.add_stats_time[:2], minute=Settings.add_stats_time[3:])
     scheduler.start()
 
     await bot.delete_webhook(drop_pending_updates=False)
