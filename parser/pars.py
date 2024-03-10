@@ -34,7 +34,6 @@ url_groups_update()
 
 
 def group_par(group: str) -> dict:
-    global count
     url = 'http://raspisanie.nnst.ru/public/www/' + all_groups[group]
 
     response = requests.get(url)
@@ -77,7 +76,7 @@ def group_par(group: str) -> dict:
                         two_subgroup_para.append([para, cab])
                         rasp[date].append(two_subgroup_para)
 
-    
+
     return rasp
 
 

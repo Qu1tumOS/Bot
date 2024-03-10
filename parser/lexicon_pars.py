@@ -20,7 +20,7 @@ def print_day(rasp_date, list_days, subgroup):
     week = f"""{days[day.strftime('%w')]}"""
 
     pars = list_days[date]
-    tabs = 22
+    tabs = 24
 
     output = [f'{date[:-5].rjust(15, " ")} {week.ljust(tabs-12, " ")}']
 
@@ -28,15 +28,18 @@ def print_day(rasp_date, list_days, subgroup):
 
 
     for i in pars:
-        lesson = i[subgroup][0].split(' ', 1)
+        lesson = i[subgroup][0]
         cab = i[subgroup][1]
 
-        if (lesson[0] != '') and (lesson[0].split('.')[0] in descript):
-            para = f'''{lesson[1].ljust(tabs, " ")} {cab}'''
-        else:
-            para = f'''{lesson[0 ]+ ' '}{lesson[1].ljust(tabs, " ")}{cab}'''
+        if lesson.split('.', 1)[0] in descript:
+            para = lesson.split('.', 1)[1][2:]
 
-        output.append(para)
+            if para[0] == ' ':
+                para = para.replace(' ', '', 1)
+
+            lesson = f'{para.ljust(tabs, " ")} {cab}'
+
+        output.append(lesson)
 
     output = '\n'.join(output)
 
