@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, BigInteger
+from sqlalchemy import create_engine, Column, Integer, String, BigInteger, JSON
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from environs import Env
@@ -28,6 +28,12 @@ class User(Base):
     # date_of_registration = Column()
     # subscription_activation = Column()
     # date_subscription_activation = Column()
+
+class Lesson(Base):
+    __tablename__ = 'lessons_on_groups'
+
+    day = Column(String, primary_key=True)
+    lessons = Column(JSON)
 
 
 Base.metadata.create_all(engine)

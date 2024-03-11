@@ -16,6 +16,7 @@ from handlers.menu_handlers.user_info import delete_handlers
 from handlers.menu_handlers.admin_panel import check_users, open_panel, stats
 from handlers.menu_handlers.admin_panel.beta_test import open_test_panel, send_for_all
 from excel import add_stat
+from parser.tests import lessons_on_groups_add_to_table
 
 
 router = Router()
@@ -64,6 +65,7 @@ async def main() -> None:
 
     scheduler = AsyncIOScheduler()
     scheduler.add_job(add_stat, 'cron', hour=Settings.add_stats_time[:2], minute=Settings.add_stats_time[3:])
+    scheduler.add_job(lessons_on_groups_add_to_table, 'cron', hour=15, minute=17)
     scheduler.start()
 
     await bot.delete_webhook(drop_pending_updates=False)
