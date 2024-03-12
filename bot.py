@@ -65,7 +65,7 @@ async def main() -> None:
 
     scheduler = AsyncIOScheduler()
     scheduler.add_job(add_stat, 'cron', hour=Settings.add_stats_time[:2], minute=Settings.add_stats_time[3:])
-    scheduler.add_job(lessons_on_groups_add_to_table, 'cron', hour=8, minute=30)
+    scheduler.add_job(lessons_on_groups_add_to_table, 'cron', hour=Settings.pars_all_group_time[:2], minute=Settings.pars_all_group_time[3:])
     scheduler.start()
 
     await bot.delete_webhook(drop_pending_updates=False)
