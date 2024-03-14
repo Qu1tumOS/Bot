@@ -9,6 +9,8 @@ from parser.pars import url_groups_update
 from parser.pars import group_par, date, users
 from parser.lexicon_pars import print_day
 from keyboards.keyboard_creator import create_inline_kb
+from parser.tests import lessons_on_groups_add_to_table
+
 from DataBase.db_connect import *
 
 from environs import Env
@@ -50,6 +52,47 @@ async def beta_new_menu(callback: CallbackQuery):
 async def beta_button(callback: CallbackQuery):
     await callback.answer('бета кнопка')
 
+def view_days():
+    days = session.query(Lesson).all()
+    dict_days = dict()
+
+    for i in days:
+        dict_days[i.day] = i.day[:2]
+
+    return dict_days
+
 @router.callback_query(F.data == 'beta_button_2')
 async def beta_button_2(callback: CallbackQuery):
-    await callback.answer('бета кнопка')
+    await callback.message.edit_text(
+        text='BETA FUNCTION <new menu>',
+        reply_markup=create_inline_kb(2,
+                                      **view_days(),
+                                      beta_new_menu='назад'))
+    await callback.answer('бета')
+
+@router.callback_query(F.data.in_(view_days()))
+async def print_day(callback: CallbackQuery):
+    data = session.query(Lesson).filter(Lesson.day==callback.data).first().lessons
+    user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
+    subgroup = user.subgroup
+
+    tabs = 24
+
+    if data != None:
+        output = [f'{callback.data.rjust(15, " ")}']
+        for i in data[user.group]:
+            para = i[subgroup][0]
+            cab = i[subgroup][1]
+
+            lesson = f'{para.ljust(tabs, " ")} {cab}'
+
+            output.append(lesson)
+        output = '\n'.join(output)
+
+        await callback.message.edit_text(
+        text=f'`{output}`',
+        parse_mode='MarkdownV2',
+        reply_markup=create_inline_kb(2,
+                                      beta_new_menu='назад'))
+    else:
+        await callback.answer('в этот день пар не было')

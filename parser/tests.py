@@ -91,6 +91,6 @@ def lessons_on_groups_add_to_table():
 
 
 
-def into_data():
-    day_onof = session.query(Lesson).filter(Lesson.tg_id==f'{today:%d.%m.%Y}').first()
+def into_data(view_day):
+    day_onof = session.query(Lesson).filter(Lesson.day==f'{view_day:%d.%m.%Y}').first()
     print(day_onof.lessons, day_onof.day)

@@ -39,7 +39,8 @@ def print_day(rasp_date, list_days, subgroup):
                 para = para.replace(' ', '', 1)
 
             lesson = f'{para.ljust(tabs, " ")} {cab}'
-
+        elif lesson == ' - ':
+            lesson = f'{lesson.ljust(tabs, " ")} {cab}'
         output.append(lesson)
 
     output = '\n'.join(output)

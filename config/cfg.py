@@ -5,7 +5,7 @@ from environs import Env
 class Settings:
     descript = 'ПМ. ОП. ОГСЭ. ЕН. ОУД.'
     add_stats_time = '23:55'
-    pars_all_group_time = '10:15'
+    pars_all_group_time = '08:15'
     dates_format = '%d.%m.%Y'
 
 @dataclass
