@@ -75,6 +75,15 @@ def group_par() -> dict:
 
     return rasp
 
+dict_days = dict()
+
+
+def view_days():
+    for i in session.query(Lesson).all():
+        dict_days[i.day] = i.day[:2]
+    print('use view_days')
+view_days()
+
 def lessons_on_groups_add_to_table():
     date = dates_in_site()
     date_str = f'{date:%d.%m.%Y}'
@@ -89,6 +98,7 @@ def lessons_on_groups_add_to_table():
         session.add(Lesson(day=today_str, lessons=None))
         session.commit()
 
+    view_days()
 
 
 def into_data(view_day):

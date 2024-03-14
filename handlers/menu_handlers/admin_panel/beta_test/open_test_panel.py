@@ -1,15 +1,7 @@
 from aiogram import Router, F
-from aiogram.types import CallbackQuery, Message
-from aiogram.filters import StateFilter
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import default_state, State, StatesGroup
-from aiogram.fsm.storage.memory import MemoryStorage
-import logging
-from parser.pars import url_groups_update
-from parser.pars import group_par, date, users
-from parser.lexicon_pars import print_day
+from aiogram.types import CallbackQuery
 from keyboards.keyboard_creator import create_inline_kb
-from parser.tests import lessons_on_groups_add_to_table
+from parser.tests import dict_days
 
 from DataBase.db_connect import *
 
@@ -52,25 +44,16 @@ async def beta_new_menu(callback: CallbackQuery):
 async def beta_button(callback: CallbackQuery):
     await callback.answer('бета кнопка')
 
-def view_days():
-    days = session.query(Lesson).all()
-    dict_days = dict()
-
-    for i in days:
-        dict_days[i.day] = i.day[:2]
-
-    return dict_days
-
 @router.callback_query(F.data == 'beta_button_2')
 async def beta_button_2(callback: CallbackQuery):
     await callback.message.edit_text(
         text='BETA FUNCTION <new menu>',
-        reply_markup=create_inline_kb(2,
-                                      **view_days(),
+        reply_markup=create_inline_kb(len(dict_days) if len(dict_days) != 0 else 1 if len(dict_days) < 6 else 6,
+                                      **dict_days,
                                       beta_new_menu='назад'))
     await callback.answer('бета')
 
-@router.callback_query(F.data.in_(view_days()))
+@router.callback_query(F.data.in_(dict_days))
 async def print_day(callback: CallbackQuery):
     data = session.query(Lesson).filter(Lesson.day==callback.data).first().lessons
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
@@ -93,6 +76,6 @@ async def print_day(callback: CallbackQuery):
         text=f'`{output}`',
         parse_mode='MarkdownV2',
         reply_markup=create_inline_kb(2,
-                                      beta_new_menu='назад'))
+                                      beta_button_2='назад'))
     else:
         await callback.answer('в этот день пар не было')

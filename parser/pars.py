@@ -14,7 +14,6 @@ all_groups = dict()
 groups_name = dict()
 groups_list = list()
 
-
 def url_groups_update():
     print(f'\nОбновление URL групп...\n')
 
