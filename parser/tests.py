@@ -89,12 +89,10 @@ def lessons_on_groups_add_to_table():
     date_str = f'{date:%d.%m.%Y}'
     today_str = f'{today:%d.%m.%Y}'
 
-    check_value_in_db = session.query(Lesson).filter(Lesson.day==date_str).first()
-
-    if today_str in date_str and not check_value_in_db:
+    if today_str in date_str and not session.query(Lesson).filter(Lesson.day==date_str).first():
         session.add(Lesson(day=date_str, lessons=group_par()))
         session.commit()
-    elif date > today:
+    elif date > today and not session.query(Lesson).filter(Lesson.day==today_str).first():
         session.add(Lesson(day=today_str, lessons=None))
         session.commit()
 

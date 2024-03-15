@@ -57,7 +57,7 @@ async def beta_button_2(callback: CallbackQuery):
 async def print_day(callback: CallbackQuery):
     data = session.query(Lesson).filter(Lesson.day==callback.data).first().lessons
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
-    subgroup = user.subgroup
+    subgroup = int(user.subgroup) - 1
 
     tabs = 24
 
