@@ -19,11 +19,49 @@ async def beta_test_panel(callback: CallbackQuery):
         text='BETA FUNCTION',
         reply_markup=create_inline_kb(1,
                                       beta_new_menu='бета главное меню',
+                                      bd_settings='БД',
                                       send_invoice='отправка сообщения всем пользователям',
                                       admin_panel='назад'
                                       )
     )
     await callback.answer()
+
+@router.callback_query(F.data == 'bd_settings')
+async def bd_settings(callback: CallbackQuery):
+    await callback.message.edit_text(
+        text=f'Выбери базу данных',
+        reply_markup=create_inline_kb(1,
+                                      Lesson='lessons_on_groups',
+                                      beta_test_panel='назад'
+        )
+    )
+
+@router.callback_query(F.data == 'Lesson')
+async def lesson(callback: CallbackQuery):
+    await callback.message.edit_text(
+        text='добаваить/удалить',
+        reply_markup=create_inline_kb(1,
+                                      lesson_add='добавить',
+                                      lesson_del='удалить',
+                                      bd_settings='назад')
+    )
+
+@router.callback_query(F.data == 'lesson_del')
+async def lesson_del(callback: CallbackQuery):
+    session.query(User).all()
+
+    x = {f'Lesson_del:{x.day}': x.day for x in session.query(Lesson).all()}
+    await callback.message.edit_text(
+        text='delete data',
+        reply_markup=create_inline_kb(1,
+                                      **x,
+                                      Lesson='назад')
+    )
+
+@router.callback_query(F.data.in_([f'Lesson_del:{i.day}' for i in session.query(Lesson).all()]))
+async def del_lesson_data(callback: CallbackQuery):
+    await callback.answer('delete??? NO NO NO')
+
 
 
 #пары, быстрый доступ, меню
@@ -48,7 +86,7 @@ async def beta_button(callback: CallbackQuery):
 async def beta_button_2(callback: CallbackQuery):
     await callback.message.edit_text(
         text='BETA FUNCTION <new menu>',
-        reply_markup=create_inline_kb(len(dict_days) if len(dict_days) != 0 else 1 if len(dict_days) < 6 else 6,
+        reply_markup=create_inline_kb(len(dict_days) if len(dict_days) < 6 else 6 if len(dict_days) != 0 else 1,
                                       **dict_days,
                                       beta_new_menu='назад'))
     await callback.answer('бета')

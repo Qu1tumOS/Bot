@@ -36,4 +36,8 @@ class Lesson(Base):
     lessons = Column(JSON)
 
 
+
 Base.metadata.create_all(engine)
+
+DB_NAME_LIST = {'User':'nnst_users',
+                'Lesson':'lessons_on_groups'}
