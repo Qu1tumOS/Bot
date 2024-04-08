@@ -13,7 +13,7 @@ router = Router()
 @router.callback_query(F.data == 'support')
 async def support(callback: CallbackQuery):
     await callback.message.edit_text(
-                text='По всем вопросам пишите ему\n@nnst_admin',
+                text='По всем вопросам пишите ему\n@Qu1tum',
                 reply_markup=create_inline_kb(1,
                                               profile='Назад')
             )

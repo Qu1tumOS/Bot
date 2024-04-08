@@ -1,10 +1,19 @@
 import requests
 import datetime
-from aiogram import Router
+import logging
 from bs4 import BeautifulSoup as bs
 from DataBase.db_connect import *
 
 today = (datetime.datetime.today() + datetime.timedelta(days=0))
+
+logger = logging.getLogger(__name__)
+
+file_handler = logging.FileHandler('logs.txt', encoding='utf8')
+file_handler.setFormatter(logging.Formatter(
+    fmt='[%(asctime)s] #%(levelname)-8s %(name)s '
+           '%(funcName)s:%(lineno)d - %(message)s'))
+logger.addHandler(file_handler)
+
 
 def dates_in_site() -> list:
     url = 'http://raspisanie.nnst.ru/public/www/hg.htm'
@@ -88,6 +97,8 @@ def lessons_on_groups_add_to_table():
     date = dates_in_site()
     date_str = f'{date:%d.%m.%Y}'
     today_str = f'{today:%d.%m.%Y}'
+
+
 
     if today_str in date_str and not session.query(Lesson).filter(Lesson.day==date_str).first():
         session.add(Lesson(day=date_str, lessons=group_par()))
