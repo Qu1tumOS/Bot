@@ -94,18 +94,34 @@ def view_days():
 view_days()
 
 def lessons_on_groups_add_to_table():
+    logger.info('\n\n-----add lessons----- \n')
     date = dates_in_site()
     date_str = f'{date:%d.%m.%Y}'
     today_str = f'{today:%d.%m.%Y}'
 
-
+    logger.info(f'date = {dates_in_site()}')
+    logger.info(f'date_str = {date:%d.%m.%Y}')
+    logger.info(f'today_str = {today:%d.%m.%Y}')
 
     if today_str in date_str and not session.query(Lesson).filter(Lesson.day==date_str).first():
-        session.add(Lesson(day=date_str, lessons=group_par()))
-        session.commit()
+        logger.info(f'added lessons day...')
+        try:
+            session.add(Lesson(day=date_str, lessons=group_par()))
+            session.commit()
+            logger.info(f'lessons add ')
+
+        except Exception as x:
+            logger.error(f'error - [{x}]')
+
     elif date > today and not session.query(Lesson).filter(Lesson.day==today_str).first():
-        session.add(Lesson(day=today_str, lessons=None))
-        session.commit()
+        logger.info(f'added None day...')
+        try:
+            session.add(Lesson(day=today_str, lessons=None))
+            session.commit()
+            logger.info(f'None day add')
+
+        except Exception as x:
+            logger.error(f'error - [{x}]')
 
     view_days()
 
