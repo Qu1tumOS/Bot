@@ -1,7 +1,8 @@
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from keyboards.keyboard_creator import create_inline_kb
-from parser.tests import dict_days, today
+from parser.tests import dict_days
+import datetime
 
 from DataBase.db_connect import *
 
@@ -80,7 +81,7 @@ async def beta_new_menu(callback: CallbackQuery):
 
 @router.callback_query(F.data == 'beta_button')
 async def beta_button(callback: CallbackQuery):
-    await callback.answer(f'today - {today}')
+    await callback.answer(f'today - {(datetime.datetime.today() + datetime.timedelta(days=0)):%d.%m.%Y}')
 
 @router.callback_query(F.data == 'beta_button_2')
 async def beta_button_2(callback: CallbackQuery):

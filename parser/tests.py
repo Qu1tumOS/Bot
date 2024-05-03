@@ -97,7 +97,7 @@ def lessons_on_groups_add_to_table():
     logger.info('\n\n-----add lessons----- \n')
     date = dates_in_site()
     date_str = f'{date:%d.%m.%Y}'
-    today_str = f'{today:%d.%m.%Y}'
+    today_str = f'{(datetime.datetime.today() + datetime.timedelta(days=0)):%d.%m.%Y}'
 
     logger.info(f'date = {dates_in_site()}')
     logger.info(f'date_str = {date:%d.%m.%Y}')
