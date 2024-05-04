@@ -99,9 +99,9 @@ def lessons_on_groups_add_to_table():
     date_str = f'{date:%d.%m.%Y}'
     today_str = f'{(datetime.datetime.today() + datetime.timedelta(days=0)):%d.%m.%Y}'
 
-    logger.info(f'date = {dates_in_site()}')
-    logger.info(f'date_str = {date:%d.%m.%Y}')
-    logger.info(f'today_str = {today:%d.%m.%Y}')
+    logger.info(f'date = {date}')
+    logger.info(f'date_str = {date_str}')
+    logger.info(f'today_str = {today_str}')
 
     if today_str in date_str and not session.query(Lesson).filter(Lesson.day==date_str).first():
         logger.info(f'added lessons day...')

@@ -74,7 +74,7 @@ async def main() -> None:
                       'cron',
                       hour=Settings.pars_all_group_time[:2],
                       minute=Settings.pars_all_group_time[3:])
-    
+
     scheduler.start()
 
     await bot.delete_webhook(drop_pending_updates=False)
