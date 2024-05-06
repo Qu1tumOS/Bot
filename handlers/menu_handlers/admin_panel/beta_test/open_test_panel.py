@@ -49,19 +49,29 @@ async def lesson(callback: CallbackQuery):
 
 @router.callback_query(F.data == 'lesson_del')
 async def lesson_del(callback: CallbackQuery):
-    session.query(User).all()
 
-    x = {f'Lesson_del:{x.day}': x.day for x in session.query(Lesson).all()}
+    data_list = {f'Lesson_del:{x.day}': x.day for x in session.query(Lesson).all()}
     await callback.message.edit_text(
         text='delete data',
         reply_markup=create_inline_kb(1,
-                                      **x,
+                                      **data_list,
                                       Lesson='назад')
     )
 
 @router.callback_query(F.data.in_([f'Lesson_del:{i.day}' for i in session.query(Lesson).all()]))
 async def del_lesson_data(callback: CallbackQuery):
-    await callback.answer('delete??? NO NO NO')
+    day = callback.data.split(':')[1]
+    session.query(Lesson).filter(Lesson.day == day).delete(synchronize_session="fetch")
+    session.commit()
+
+    data_list = {f'Lesson_del:{x.day}': x.day for x in session.query(Lesson).all()}
+    await callback.message.edit_text(
+        text='delete data',
+        reply_markup=create_inline_kb(1,
+                                      **data_list,
+                                      Lesson='назад')
+    )
+    await callback.answer(f'delete {day}')
 
 
 
