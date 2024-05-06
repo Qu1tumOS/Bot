@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import CallbackQuery
 from keyboards.keyboard_creator import create_inline_kb
-from parser.tests import dict_days
+from parser.tests import dict_days, view_days
 import datetime
 
 from DataBase.db_connect import *
@@ -64,6 +64,8 @@ async def del_lesson_data(callback: CallbackQuery):
     session.query(Lesson).filter(Lesson.day == day).delete(synchronize_session="fetch")
     session.commit()
 
+    view_days()
+    
     data_list = {f'Lesson_del:{x.day}': x.day for x in session.query(Lesson).all()}
     await callback.message.edit_text(
         text='delete data',
