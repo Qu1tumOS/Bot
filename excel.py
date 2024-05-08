@@ -86,11 +86,12 @@ def add_stat(day=today, file_name='2024'):
                 logger.debug(f'YES FIND COLUMN GROUP {i[0]} :5.1')
                 break
         try:
-            sheet.cell(row=row_number, column=column_number).value = i[1]
+            sheet.cell(row=row_number, column=column_number).value = str(i[1])
             logger.debug('ADD stat :5.2')
         except Exception as x:
             logger.error(f'NOT ADD stat :5.2 - [{x}]\n\n')
 
+    sheet.cell(row=1, column=1).value = f'{datetime.datetime.today():%d.%m.%Y}'
     try:
         workbook.save(f'{file_name}.xlsx')
         logger.info('save new stats :6\n\n')
