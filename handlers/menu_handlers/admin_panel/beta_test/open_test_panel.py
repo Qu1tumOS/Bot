@@ -125,7 +125,7 @@ async def print_day(callback: CallbackQuery):
     tabs = 24
 
     if data:
-        output = [f'{callback.data.rjust(15, " ")}']
+        output = [f'{callback.data.rjust(19, " ")}']
         for i in data[user.group]:
             para = i[subgroup][0]
             cab = i[subgroup][1]
@@ -140,6 +140,7 @@ async def print_day(callback: CallbackQuery):
         parse_mode='MarkdownV2',
         reply_markup=create_inline_kb(2,
                                       beta_button_2='назад'))
+        await callback.answer()
     else:
         await callback.answer('в этот день пар не было')
 
