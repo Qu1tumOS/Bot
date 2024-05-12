@@ -3,7 +3,7 @@ from aiogram.types import CallbackQuery
 from keyboards.keyboard_creator import create_inline_kb
 from parser.tests import dict_days, view_days
 import datetime
-
+from excel import lexicon_month
 from testingi import create_dict_for_keyboard
 
 from DataBase.db_connect import *
@@ -100,15 +100,17 @@ async def beta_button(callback: CallbackQuery):
 @router.callback_query(F.data == 'beta_button_2')
 async def beta_button_2(callback: CallbackQuery):
 
-    today = int(f'{datetime.datetime.today():%m}')
-    new_dict = create_dict_for_keyboard(5)
-    for k, v in dict_days.items():
-        if k in new_dict:
-            new_dict[k] = v
+    month = f'{datetime.datetime.today():%m}'
+    new_dict = create_dict_for_keyboard(int(month))
+    for key, value in dict_days.items():
+        if key in new_dict:
+            new_dict[key] = value
 
+    text_month = 'сентябрь'
 
     await callback.message.edit_text(
-        text='BETA FUNCTION <new menu>',
+        text=f'`•пн    вт    ср    чт    пт    сб•\nㅤ`',
+        parse_mode='MarkdownV2',
         reply_markup=create_inline_kb(6,
                                       **new_dict,
                                       beta_new_menu='назад'))
