@@ -4,6 +4,8 @@ from keyboards.keyboard_creator import create_inline_kb
 from parser.tests import dict_days, view_days
 import datetime
 
+from testingi import create_dict_for_keyboard
+
 from DataBase.db_connect import *
 
 from environs import Env
@@ -65,7 +67,7 @@ async def del_lesson_data(callback: CallbackQuery):
     session.commit()
 
     view_days()
-    
+
     data_list = {f'Lesson_del:{x.day}': x.day for x in session.query(Lesson).all()}
     await callback.message.edit_text(
         text='delete data',
@@ -93,14 +95,22 @@ async def beta_new_menu(callback: CallbackQuery):
 
 @router.callback_query(F.data == 'beta_button')
 async def beta_button(callback: CallbackQuery):
-    await callback.answer(f'today - {(datetime.datetime.today() + datetime.timedelta(days=0)):%d.%m.%Y}')
+    await callback.answer(f'today - {(datetime.datetime.today()):%d.%m.%Y}')
 
 @router.callback_query(F.data == 'beta_button_2')
 async def beta_button_2(callback: CallbackQuery):
+
+    today = int(f'{datetime.datetime.today():%m}')
+    new_dict = create_dict_for_keyboard(5)
+    for k, v in dict_days.items():
+        if k in new_dict:
+            new_dict[k] = v
+
+
     await callback.message.edit_text(
         text='BETA FUNCTION <new menu>',
-        reply_markup=create_inline_kb(len(dict_days) if len(dict_days) < 6 else 6 if len(dict_days) != 0 else 1,
-                                      **dict_days,
+        reply_markup=create_inline_kb(6,
+                                      **new_dict,
                                       beta_new_menu='назад'))
     await callback.answer('бета')
 
@@ -112,7 +122,7 @@ async def print_day(callback: CallbackQuery):
 
     tabs = 24
 
-    if data != None:
+    if data:
         output = [f'{callback.data.rjust(15, " ")}']
         for i in data[user.group]:
             para = i[subgroup][0]
@@ -130,3 +140,7 @@ async def print_day(callback: CallbackQuery):
                                       beta_button_2='назад'))
     else:
         await callback.answer('в этот день пар не было')
+
+@router.callback_query(F.data.in_(create_dict_for_keyboard(5)))
+async def print_not_day(callback: CallbackQuery):
+    await callback.answer('на этот день пар еще нет')
