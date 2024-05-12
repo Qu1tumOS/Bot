@@ -23,18 +23,18 @@ def month(month):
         return list(pd.period_range(start=f'2024-{month}-01', end=f'2024-{month+1}-01', freq='D'))[:-1]
     return list(pd.period_range(start=f'2024-{month}-01', end=f'2025-01-01', freq='D'))[:-1]
 
-lexicon_month = {1:'Январь',
-                 2:'Февраль',
-                 3:'Март',
-                 4:'Апрель',
-                 5:'Май',
-                 6:'Июнь',
-                 7:'Июль',
-                 8:'Август',
-                 9:'Сентябрь',
-                 10:'Октябрь',
-                 11:'Ноябрь',
-                 12:'Декабрь'}
+lexicon_month = {'01':'Январь',
+                 '02':'Февраль',
+                 '03':'Март',
+                 '04':'Апрель',
+                 '05':'Май',
+                 '06':'Июнь',
+                 '07':'Июль',
+                 '08':'Август',
+                 '09':'Сентябрь',
+                 '10':'Октябрь',
+                 '11':'Ноябрь',
+                 '12':'Декабрь'}
 
 def create_table(name):
     file_name = f'{name}.xlsx'
@@ -56,44 +56,33 @@ def create_table(name):
 def add_stat(day=today, file_name='2024'):
     logger.info('\n\n-----start add stats----- \n')
 
-    workbook = openpyxl.load_workbook(f'{file_name}.xlsx')
+
+    workbook = openpyxl.load_workbook(f'{file_name}.xlsx') #открытие файла
     logger.info('open file :1')
 
-    if day[5] == '0':
-        month = int(day[6])
-    else:
-        month = int(day[5:7])
-    logger.info('add month name :2')
+    sheet = workbook[lexicon_month[day[5:7]]] #открываем нужный лист с текущим месяцем
+    logger.info('open page :2')
 
-    sheet = workbook[lexicon_month[month]]
-    logger.info('open month page :3')
-
-
-    for col in range(1, sheet.max_column+1):
-        if sheet.cell(row=1, column=col).value == day:
+    for col in range(1, sheet.max_column+1): #проходимся по всем колонкам в первой строке (даты)
+        if sheet.cell(row=1, column=col).value == day: #если дата совпадает с текущей, сохраняем ее в переменную
             column_number = col
-            logger.info('YES FIND DAY COLUMN :4')
+            logger.info('FIND DAY COLUMN :3')
             break
-    for row in range(2, sheet.max_row + 1):
-        sheet.cell(row = row, column=column_number).value = '-'
-    logger.info('all rows fill - :5')
 
-    users_in_groups = users()
-    for i in users_in_groups.items():
-        for row in range(2, sheet.max_row + 1):
-            if sheet.cell(row=row, column=1).value == i[0]:
-                row_number = row
-                logger.debug(f'YES FIND COLUMN GROUP {i[0]} :5.1')
-                break
-        try:
-            sheet.cell(row=row_number, column=column_number).value = str(i[1])
-            logger.debug('ADD stat :5.2')
-        except Exception as x:
-            logger.error(f'NOT ADD stat :5.2 - [{x}]\n\n')
+    count_users = users()
+    if not count_users:
+        logger.error('!!! словарь со статистикой пустой !!!')
 
-    sheet.cell(row=1, column=1).value = f'{datetime.datetime.today():%d.%m.%Y}'
+    for row in range(2, sheet.max_row + 1): #проходимся по всем группам (первый столбец)
+        group = (sheet.cell(row=row, column=1).value)
+        if group in count_users: # если номер группы есть в словаре со статистикой, добавляем в таблицу количество пользователей в этой группе
+            sheet.cell(row = row, column=column_number).value = '-'
+            sheet.cell(row=row, column=column_number).value = str(count_users[group])
+
+    sheet.cell(row=1, column=1).value = f'{datetime.datetime.today():%d.%m.%Y}' # добавляем в левый верхний угол дату изменения (для выявления ошибок)
+
     try:
         workbook.save(f'{file_name}.xlsx')
-        logger.info('save new stats :6\n\n')
+        logger.info('save new stats :4\n\n') # сохраняем изменения
     except Exception as x:
         logger.error(f'save new stats :6 - [{x}]\n\n')
