@@ -1,7 +1,6 @@
 from aiogram import Router, F
 from aiogram.types import CallbackQuery, Message
 from aiogram.filters import CommandStart
-import datetime
 from keyboards.keyboard_creator import create_inline_kb
 from parser.pars import all_groups, groups_name
 from DataBase.db_connect import *

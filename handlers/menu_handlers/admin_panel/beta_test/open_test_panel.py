@@ -102,11 +102,12 @@ async def beta_button_2(callback: CallbackQuery):
 
     month = f'{datetime.datetime.today():%m}'
     new_dict = create_dict_for_keyboard(int(month))
+
+    view_days()
+
     for key, value in dict_days.items():
         if key in new_dict:
             new_dict[key] = value
-
-    text_month = 'сентябрь'
 
     await callback.message.edit_text(
         text=f'`•пн    вт    ср    чт    пт    сб•\nㅤ`',

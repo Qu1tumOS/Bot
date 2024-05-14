@@ -70,14 +70,16 @@ def add_stat(day=today, file_name='2024'):
             break
 
     count_users = users()
-    if not count_users:
-        logger.error('!!! словарь со статистикой пустой !!!')
+    logger.info(f'{"-"*15}\n\nсловарь со статистикой - \nдлина: {len(count_users)}\nсловарь: {count_users}\n\n{"-"*15}')
 
     for row in range(2, sheet.max_row + 1): #проходимся по всем группам (первый столбец)
-        group = (sheet.cell(row=row, column=1).value)
-        if group in count_users: # если номер группы есть в словаре со статистикой, добавляем в таблицу количество пользователей в этой группе
-            sheet.cell(row = row, column=column_number).value = '-'
-            sheet.cell(row=row, column=column_number).value = str(count_users[group])
+        try:
+            group = (sheet.cell(row=row, column=1).value)
+            if group in count_users: # если номер группы есть в словаре со статистикой, добавляем в таблицу количество пользователей в этой группе
+                sheet.cell(row = row, column=column_number).value = '-'
+                sheet.cell(row=row, column=column_number).value = str(count_users[group])
+        except Exception as error:
+            logger.info(f'!!!{error}!!!')
 
     sheet.cell(row=1, column=1).value = f'{datetime.datetime.today():%d.%m.%Y}' # добавляем в левый верхний угол дату изменения (для выявления ошибок)
 
