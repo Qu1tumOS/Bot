@@ -58,15 +58,15 @@ def add_stat(day=today, file_name='2024'):
 
 
     workbook = openpyxl.load_workbook(f'{file_name}.xlsx') #открытие файла
-    logger.info('open file :1')
+    logger.info(f'open file :{file_name}')
 
     sheet = workbook[lexicon_month[day[5:7]]] #открываем нужный лист с текущим месяцем
-    logger.info('open page :2')
+    logger.info(f'open page :{lexicon_month[day[5:7]]}')
 
     for col in range(1, sheet.max_column+1): #проходимся по всем колонкам в первой строке (даты)
         if sheet.cell(row=1, column=col).value == day: #если дата совпадает с текущей, сохраняем ее в переменную
             column_number = col
-            logger.info('FIND DAY COLUMN :3')
+            logger.info(f'FIND DAY COLUMN :{col}-{day}')
             break
 
     count_users = users()
