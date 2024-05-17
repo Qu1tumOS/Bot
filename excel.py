@@ -65,25 +65,19 @@ def add_stat(day=f'{datetime.datetime.today():%Y-%m-%d}', file_name='2024'):
     for col in range(1, sheet.max_column+1): #проходимся по всем колонкам в первой строке (даты)
         if sheet.cell(row=1, column=col).value == day: #если дата совпадает с текущей, сохраняем ее в переменную
             column_number = col
-            logger.info(f'FIND DAY COLUMN :{col}-{day}')
+            logger.info(f'FIND DAY COLUMN :{day}-{col}')
             break
 
     count_users = users()
     logger.info(f'{"-"*15}\n\nсловарь со статистикой - \nдлина: {len(count_users)}\nсловарь: {count_users}\n\n{"-"*15}')
 
     for row in range(2, sheet.max_row + 1): #проходимся по всем группам (первый столбец)
-        try:
-            group = (sheet.cell(row=row, column=1).value)
-            if group in count_users: # если номер группы есть в словаре со статистикой, добавляем в таблицу количество пользователей в этой группе
-                sheet.cell(row = row, column=column_number).value = '-'
-                sheet.cell(row=row, column=column_number).value = str(count_users[group])
-        except Exception as error:
-            logger.info(f'!!!{error}!!!')
+        group = (sheet.cell(row=row, column=1).value)
+        if group in count_users: # если номер группы есть в словаре со статистикой, добавляем в таблицу количество пользователей в этой группе
+            sheet.cell(row = row, column=column_number).value = '-'
+            sheet.cell(row=row, column=column_number).value = str(count_users[group])
 
     sheet.cell(row=1, column=1).value = f'{datetime.datetime.today():%d.%m.%Y}' # добавляем в левый верхний угол дату изменения (для выявления ошибок)
 
-    try:
         workbook.save(f'{file_name}.xlsx')
         logger.info('save new stats :4\n\n') # сохраняем изменения
-    except Exception as x:
-        logger.error(f'save new stats :6 - [{x}]\n\n')
