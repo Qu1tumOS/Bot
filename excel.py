@@ -79,5 +79,5 @@ def add_stat(day=f'{datetime.datetime.today():%Y-%m-%d}', file_name='2024'):
 
     sheet.cell(row=1, column=1).value = f'{datetime.datetime.today():%d.%m.%Y}' # добавляем в левый верхний угол дату изменения (для выявления ошибок)
 
-        workbook.save(f'{file_name}.xlsx')
-        logger.info('save new stats :4\n\n') # сохраняем изменения
+    workbook.save(f'{file_name}.xlsx')
+    logger.info('save new stats :4\n\n') # сохраняем изменения
