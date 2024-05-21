@@ -52,7 +52,9 @@ def create_table(name):
 
             page.to_excel(writer, sheet_name=lexicon_month[i])
 
-def add_stat(day=f'{datetime.datetime.today():%Y-%m-%d}', file_name='2024'):
+def add_stat():
+    day = f'{datetime.datetime.today():%Y-%m-%d}'
+    file_name = f'{datetime.datetime.today():%Y}'
     logger.info('\n\n-----start add stats----- \n')
 
 
