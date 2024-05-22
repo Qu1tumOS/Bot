@@ -13,25 +13,12 @@ import logging
 
 router = Router()
 
-logger = logging.getLogger(__name__)
-
-file_handler = logging.FileHandler('logs.txt', encoding='utf8')
-file_handler.setFormatter(logging.Formatter(
-    fmt='[%(asctime)s] #%(levelname)-8s %(name)s '
-           '%(funcName)s:%(lineno)d - %(message)s'))
-logger.addHandler(file_handler)
-
-
 @router.callback_query(F.data == 'today_button')
 async def today(callback: CallbackQuery):
-    logger.info(f'today\n\n')
-
     today = f'{datetime.today():%d.%m.%Y}'
-    logger.info(f'today - {today}\n')
 
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
     data = session.query(Lesson).filter(Lesson.day==today).first().lessons
-    logger.info(f'data - {data}\n')
 
     week_pars = group_par(user.group)
 
