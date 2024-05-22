@@ -15,7 +15,7 @@ router = Router()
 
 @router.callback_query(F.data == 'today_button')
 async def today(callback: CallbackQuery):
-    today = f'{datetime.today():%d.%m.%Y}'
+    today = f'{datetime.datetime.today():%d.%m.%Y}'
 
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
     data = session.query(Lesson).filter(Lesson.day==today).first().lessons
@@ -68,7 +68,7 @@ async def today(callback: CallbackQuery):
 
 @router.callback_query(F.data == 'update_today')
 async def update_today(callback: CallbackQuery):
-    today = f'{datetime.today():%d.%m.%Y}'
+    today = f'{datetime.datetime.today():%d.%m.%Y}'
 
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
     data = session.query(Lesson).filter(Lesson.day==today).first().lessons
