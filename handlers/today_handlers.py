@@ -71,7 +71,7 @@ async def update_today(callback: CallbackQuery):
     today = f'{datetime.datetime.today():%d.%m.%Y}'
 
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
-    data = session.query(Lesson).filter(Lesson.day==today).first().lessons
+    data = session.query(Lesson).filter(Lesson.day==today).first()
 
 
     week_pars = group_par(user.group)
@@ -95,7 +95,7 @@ async def update_today(callback: CallbackQuery):
 
         if data:
             output = [f'{today[:5].rjust(19, " ")}']
-            for i in data[user.group]:
+            for i in data.lessons[user.group]:
                 para = i[subgroup][0]
                 cab = i[subgroup][1]
 
