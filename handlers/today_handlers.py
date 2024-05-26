@@ -33,7 +33,7 @@ async def today(callback: CallbackQuery):
                                               update_today='Обновить')
             )
 
-    elif data:
+    elif data and today.weekday() != 6:
         subgroup = int(user.subgroup) - 1
 
         tabs = 24
@@ -88,7 +88,7 @@ async def update_today(callback: CallbackQuery):
         else:
             await callback.answer(text='Расписание не изменилось ✅')
 
-    elif data:
+   elif data and today.weekday() != 6:
         subgroup = int(user.subgroup) - 1
 
         tabs = 24
