@@ -15,7 +15,8 @@ router = Router()
 
 @router.callback_query(F.data == 'today_button')
 async def today(callback: CallbackQuery):
-    today = f'{datetime.datetime.today():%d.%m.%Y}'
+    dt_today = datetime.datetime.today()
+    today = f'{dt_today:%d.%m.%Y}'
 
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
     data = session.query(Lesson).filter(Lesson.day==today).first()
@@ -33,7 +34,7 @@ async def today(callback: CallbackQuery):
                                               update_today='Обновить')
             )
 
-    elif data and today.weekday() != 6:
+    elif data and dt_today.weekday() != 6:
         subgroup = int(user.subgroup) - 1
 
         tabs = 24
@@ -68,7 +69,8 @@ async def today(callback: CallbackQuery):
 
 @router.callback_query(F.data == 'update_today')
 async def update_today(callback: CallbackQuery):
-    today = f'{datetime.datetime.today():%d.%m.%Y}'
+    dt_today = datetime.datetime.today()
+    today = f'{dt_today:%d.%m.%Y}'
 
     user = session.query(User).filter(User.tg_id==callback.from_user.id).first()
     data = session.query(Lesson).filter(Lesson.day==today).first()
@@ -88,7 +90,7 @@ async def update_today(callback: CallbackQuery):
         else:
             await callback.answer(text='Расписание не изменилось ✅')
 
-    elif data and today.weekday() != 6:
+    elif data and dt_today.weekday() != 6:
         subgroup = int(user.subgroup) - 1
 
         tabs = 24
