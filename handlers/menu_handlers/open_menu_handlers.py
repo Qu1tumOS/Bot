@@ -20,7 +20,7 @@ async def open_profile(callback: CallbackQuery):
         await callback.message.edit_text(
             text='ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ',
             reply_markup=create_inline_kb(1,
-                                        user_info='Профиль🎅',
+                                        user_info='Профиль👤',
                                         # user_friends='Друзья',
                                         support='Поддержка',
                                         pay_money='поддержать проект',
@@ -31,7 +31,7 @@ async def open_profile(callback: CallbackQuery):
         await callback.message.edit_text(
             text='ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ',
             reply_markup=create_inline_kb(1,
-                                        user_info='Профиль🎅',
+                                        user_info='Профиль👤',
                                         # user_friends='Друзья',
                                         support='Поддержка👤',
                                         pay_money='поддержать проект',
